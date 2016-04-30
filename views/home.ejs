@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="Deepan Saravanan" content="">
+
+    <title>CAL 9000</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/css/scrolling-nav.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/card-depth.js"></script>
+    <script type="text/javascript">
+
+    var getRecentEvent = function () {
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/getRecentEvent',
+            success: function (data) {
+                if (data) {
+                    console.log(data); 
+                } else {
+                    console.log('something went wrong');
+                    //console.log(err); 
+                }
+            }
+        });
+    };
+
+    window.onload = getRecentEvent; 
+
+        var populateDiv = function (data) {
+            $('.search-results').html(''); 
+            //console.log(data.length); 
+            for (var i = 0; i < data.length; i++) {
+                console.log('summary: ' + JSON.parse(data[i])['summary']); 
+                var object = JSON.parse(data[i]); 
+                var start = parseTime(object['startTime']); 
+                console.log('start: ' + start); 
+                var end = parseTime(object['endTime']); 
+                console.log('end: ' + end); 
+                var html = '<div class="card">' + 
+                '<a href=' + object['link'] + '><h3><strong>' + object['summary'] + '</strong></h3></a>' + 
+                '<h5>' + object['description'] + '</h5>' + 
+                '<h5><strong>starts:</strong> ' + start + '</h5>' +
+                '<h5><strong>ends:</strong> ' + end + '</h5>' +
+                '<h5><strong>location:</strong> ' + object['location'] + '</h5>' +
+                '</div>'; 
+                $('.search-results').append(html); 
+            }
+        }; 
+
+        var parseTime = function (str) {
+            if (!str) {
+                return ''; 
+            }
+            var when = 'am'; 
+            var arr = str.split('T'); 
+            if (arr.length === 1) {
+                return arr[0]; 
+            } else {
+                var temp = arr[1]; 
+                var arr2 = temp.split('-'); 
+                var time = arr2[0];
+                var hour = Number(time.substring(0, 2)); 
+                if (hour > 12) {
+                    hour  = hour - 12; 
+                    when = 'pm'; 
+                } else if (hour === 0) {
+                    hour  = 12; 
+                }
+                var newTime = arr[0] + ', ' + hour + time.substring(2, time.length) + ' ' + when; 
+                return newTime;  
+            }
+        }
+    </script>
+</head>
+
+<!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="/searchPg">Search</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    <li class="hidden">
+                        <a class="page-scroll" href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="/getAddEvent">Add Event</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#">Schedule</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Intro Section -->
+    <section id="intro" class="intro-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Hello, <%= data %></h1>
+                    <div id="reminder">
+                    </div>
+                    <div class="form-group">
+                        <input id="search" type="text" class="form-control" placeholder="Search">
+                        <script type="text/javascript">
+                            $('#search').keyup(function () {
+                                console.log('keyup event registered'); 
+                                var query = $('#search').val(); 
+                                $.ajax({
+                                    type: 'GET',
+                                    data: query,
+                                    url: 'http://localhost:8080/popResults',
+                                    success: function (results) {
+                                        console.log(results); 
+                                        populateDiv(results); 
+                                    }
+                                }); 
+                            }); 
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="search-results">
+                <!--div class="card" z-default=20 z-hover=50>
+                    <a href="#"><h3><strong>Javascript</strong></h3></a>
+                    <h5>React JS homework due tonight</h5>
+                    <div class="col-md-4">
+                        <h5><strong>starts:</strong> 9:00pm</h5>
+                    </div>
+                    <div class="col-md-4">
+                        <h5><strong>ends:</strong> 10:00pm</h5>
+                    </div>
+                    <h5><strong>location</strong>: Moore 100</h5>
+                    <h5><strong>link:</strong><a href="#"></a></h5>
+                </div-->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section >
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>About Section</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!Services Section >
+    <section id="services" class="services-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Services Section</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!Contact Section>
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Contact Section</h1>
+                </div>
+            </div>
+        </div>
+    </section-->
+
+    <!-- jQuery -->
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- Scrolling Nav JavaScript -->
+    <script src="/js/jquery.easing.min.js"></script>
+    <script src="/js/scrolling-nav.js"></script>
+
+</body>
+
+</html>
