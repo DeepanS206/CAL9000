@@ -185,11 +185,11 @@ app.get('/logout', function (req, res) {
       if (err) {
         console.log('Error in deleting user id from database: ' + err);
         req.session = null
-        res.redirect('/');
+        res.redirect('/signin');
       } else {
         console.log('user successfully removed from database');
         req.session = null
-        res.redirect('/');
+        res.redirect('/signin');
       }
     });
   } else {
