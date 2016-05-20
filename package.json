@@ -1,8 +1,8 @@
 {
-  "name": "hw6",
+  "name": "CAL9000",
   "version": "1.0.0",
   "description": "Penn Course Review API",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "start": "node ./bin/run-server",
     "test": "grunt"

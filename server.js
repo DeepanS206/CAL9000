@@ -17,9 +17,13 @@ var generateCookieSecret = function () {
   return 'iamasecret' + uuid.v4();
 };
 
-app.use(cookieSession({
-  secret: generateCookieSecret()
-})); 
+//app.use(cookieSession({
+  //secret: generateCookieSecret()
+//})); 
+
+app.use(session({
+  secret: 'iamasecret'
+}));
 
 app.use(bodyParser.urlencoded({ extended: false })); 
 
@@ -51,6 +55,7 @@ function listEvents(auth, id) {
     var events = response.items;
     if (events.length == 0) {
       console.log('No upcoming events found.');
+      return;
     } else {
       console.log('Upcoming 20 events:');
       for (var i = 0; i < events.length; i++) {
@@ -83,7 +88,9 @@ app.get('/search', function (req, res) {
       plus.people.get({ userId: 'me', auth: oauth2Client }, function (err2, response) {
         if (!err2) {
           req.session.name = response['displayName']; 
+          console.log('Display Name: ' + response['displayName']);
           req.session.userId = response['id']; 
+          console.log('User Id: ' + response['id']);
           firebase.addUser(req.session.userId, req.session.name); 
           listEvents(oauth2Client, req.session.userId); 
           res.render('home.ejs', {data: req.session.name}); 
@@ -175,10 +182,18 @@ app.get('/popResults', function (req, res) {
 app.get('/getRecentEvent', routes.get_recent); 
 
 app.get('/logout', function (req, res) {
-  if (req.session.isAuthenticated) {
+  req.session.destroy(function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('session destroyed');
+      res.redirect('/'); 
+    }
+  });
+  /*if (req.session.isAuthenticated) {
     req.session = null; 
   } 
-  res.redirect('/'); 
+  res.redirect('/'); */
 });
 
 console.log('Author: Deepan Saravanan (deepans)');
