@@ -149,7 +149,7 @@
                                 $.ajax({
                                     type: 'GET',
                                     data: query,
-                                    url: 'http://localhost:8080/popResults',
+                                    url: 'https://cal9000.herokuapp.com/popResults',
                                     success: function (results) {
                                         console.log(results); 
                                         populateDiv(results); 

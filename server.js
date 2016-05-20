@@ -23,7 +23,7 @@ app.use(cookieSession({
 app.use(bodyParser.urlencoded({ extended: false })); 
 
 var oauth2Client = new OAuth2('308256462081-c8tr2ruobau2p0gcvbufaoelgl2mld5k.apps.googleusercontent.com', 
-  'hYhGyMgcjLQTE8jVhAUDqYoH', 'http://localhost:8080/search');
+  'hYhGyMgcjLQTE8jVhAUDqYoH', 'https://cal9000.herokuapp.com/search');
 google.options({ auth: oauth2Client });
 
 // generate a url that asks permissions Google Calendar scope
