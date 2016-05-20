@@ -1,7 +1,6 @@
 var express = require ('express'); 
 var routes = require('./routes/routes.js');
 var firebase = require('./models/firebase.js'); 
-var session = require('express-session');
 var cookieSession = require('cookie-session'); 
 var bodyParser = require('body-parser'); 
 var http = require('http'); 
