@@ -1,7 +1,7 @@
 var Firebase = require('firebase');
 var StrParser = require('string');
 var Set = require('./set'); 
-var myFirebaseRef = new Firebase('https://boiling-fire-2218.firebaseio.com/');
+var myFirebaseRef = new Firebase('https://project-3577478074564744891.firebaseio.com/');
 
 var getEvent = function (query, id, callback) {
   var userRef = myFirebaseRef.child(id); 
@@ -50,7 +50,7 @@ var addArrToSet = function (set, arr, callback) {
 
 module.exports = {
   addUser: function (id, name) {
-    myFirebaseRef.set(id); 
+    myFirebaseRef.push(id); 
     var userRef = myFirebaseRef.child(id); 
     userRef.set({name: name, events: ''});
   },

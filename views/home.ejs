@@ -145,6 +145,7 @@
                             $('#search').keyup(function () {
                                 console.log('keyup event registered'); 
                                 var query = $('#search').val(); 
+                                console.log('Query: ' + query);
                                 $.ajax({
                                     type: 'GET',
                                     data: query,
@@ -152,6 +153,12 @@
                                     success: function (results) {
                                         console.log(results); 
                                         populateDiv(results); 
+                                    },
+                                    error: function (xhr, err, obj) {
+                                        console.log('Error: ' + err);
+                                    },
+                                    complete: function (xhr, status) {
+                                        console.log('Complete: ' + status); 
                                     }
                                 }); 
                             }); 

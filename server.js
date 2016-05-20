@@ -17,13 +17,9 @@ var generateCookieSecret = function () {
   return 'iamasecret' + uuid.v4();
 };
 
-//app.use(cookieSession({
-  //secret: generateCookieSecret()
-//})); 
-
-app.use(session({
-  secret: 'iamasecret'
-}));
+app.use(cookieSession({
+  secret: generateCookieSecret()
+})); 
 
 app.use(bodyParser.urlencoded({ extended: false })); 
 
@@ -168,7 +164,8 @@ app.get('/popResults', function (req, res) {
   var str = JSON.stringify(req.query); 
   var arr = str.split(':'); 
   var str2 = arr[0]; 
-  var query = str2.substring(2, str2.length - 1); 
+  var query = str2.substring(2, str2.length - 1);
+  console.log('HEY IM WORKING') 
   firebase.getEvents(query, req.session.userId, function (data) {
     console.log(data); 
     if (query === '}') {
@@ -182,20 +179,12 @@ app.get('/popResults', function (req, res) {
 app.get('/getRecentEvent', routes.get_recent); 
 
 app.get('/logout', function (req, res) {
-  req.session.destroy(function (err) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('session destroyed');
-      res.redirect('/'); 
-    }
-  });
-  /*if (req.session.isAuthenticated) {
+  if (req.session.isAuthenticated) {
     req.session = null; 
   } 
-  res.redirect('/'); */
+  res.redirect('/'); 
 });
 
 console.log('Author: Deepan Saravanan (deepans)');
-app.listen(8080);
+http.createServer(app).listen(8080);
 console.log('Server running on port 8080. Now open http://localhost:8080/ in your browser!');
