@@ -4,8 +4,7 @@
   "description": "Penn Course Review API",
   "main": "server.js",
   "scripts": {
-    "start": "node ./bin/run-server",
-    "test": "grunt"
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
