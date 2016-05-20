@@ -28,6 +28,7 @@ google.options({ auth: oauth2Client });
 
 // generate a url that asks permissions Google Calendar scope
 var scopes = [
+  'https://www.googleapis.com/auth/userinfo.profile',
   'https://www.googleapis.com/auth/calendar',
   'https://www.googleapis.com/auth/plus.login'
 ];
@@ -178,12 +179,24 @@ app.get('/popResults', function (req, res) {
 app.get('/getRecentEvent', routes.get_recent); 
 
 app.get('/logout', function (req, res) {
+  console.log(req.session.userId); 
   if (req.session.isAuthenticated) {
-    req.session = null; 
-  } 
-  res.redirect('/'); 
+    firebase.removeUser(req.session.userId, function (err) {
+      if (err) {
+        console.log('Error in deleting user id from database: ' + err);
+        req.session = null
+        res.redirect('/');
+      } else {
+        console.log('user successfully removed from database');
+        req.session = null
+        res.redirect('/');
+      }
+    });
+  } else {
+    res.redirect('/');
+  }
 });
 
 console.log('Author: Deepan Saravanan (deepans)');
-http.createServer(app).listen(8080);
+http.createServer(app).listen(process.env.PORT || 8080)
 console.log('Server running on port 8080. Now open http://localhost:8080/ in your browser!');
