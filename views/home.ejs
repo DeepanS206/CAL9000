@@ -89,7 +89,7 @@
             }
         }
     </script>
-</head>
+</head>t
 
 <!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
 
@@ -149,7 +149,7 @@
                                 $.ajax({
                                     type: 'GET',
                                     data: query,
-                                    url: 'https://cal9000.herokuapp.com/popResults',
+                                    url: 'http://localhost:8080/popResults',
                                     success: function (results) {
                                         console.log(results); 
                                         populateDiv(results); 
@@ -182,39 +182,6 @@
             </div>
         </div>
     </section>
-
-    <!-- About Section >
-    <section id="about" class="about-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1>About Section</h1>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!Services Section >
-    <section id="services" class="services-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1>Services Section</h1>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!Contact Section>
-    <section id="contact" class="contact-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1>Contact Section</h1>
-                </div>
-            </div>
-        </div>
-    </section-->
 
     <!-- jQuery -->
     <!-- Bootstrap Core JavaScript -->

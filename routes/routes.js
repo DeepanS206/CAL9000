@@ -20,6 +20,7 @@ var getAddEvent = function (req, res) {
 };
 
 var getRecentEvent = function (req, res) {
+  console.log('getting recent event');
   firebase.getRecentEvent(req.session.userId, function (err, data) {
     if (!err) {
       console.log(data); 

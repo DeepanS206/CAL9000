@@ -23,7 +23,7 @@ app.use(cookieSession({
 app.use(bodyParser.urlencoded({ extended: false })); 
 
 var oauth2Client = new OAuth2('308256462081-c8tr2ruobau2p0gcvbufaoelgl2mld5k.apps.googleusercontent.com', 
-  'hYhGyMgcjLQTE8jVhAUDqYoH', 'https://cal9000.herokuapp.com/search');
+  'hYhGyMgcjLQTE8jVhAUDqYoH', 'http://localhost:8080/search');
 google.options({ auth: oauth2Client });
 
 // generate a url that asks permissions Google Calendar scope
@@ -167,7 +167,7 @@ app.get('/popResults', function (req, res) {
   var query = str2.substring(2, str2.length - 1);
   console.log('HEY IM WORKING') 
   firebase.getEvents(query, req.session.userId, function (data) {
-    console.log(data); 
+    //console.log(data); 
     if (query === '}') {
       res.send([]); 
     } else {
@@ -185,11 +185,11 @@ app.get('/logout', function (req, res) {
       if (err) {
         console.log('Error in deleting user id from database: ' + err);
         req.session = null
-        res.redirect('/signin');
+        res.redirect('/');
       } else {
         console.log('user successfully removed from database');
         req.session = null
-        res.redirect('/signin');
+        res.redirect('/');
       }
     });
   } else {
